@@ -5,12 +5,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sarvesh.domain.FirstDomain;
@@ -21,6 +23,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
+@CrossOrigin("http://localhost:4200")
 @RestController
 @RequestMapping("/api")
 @Api(value = "FirstControllerAPI")
@@ -38,7 +41,6 @@ public class FirstController {
 			@ApiResponse(code = 404, message = "The API could not be found") })
 	public ResponseEntity<List<FirstDomain>> getAll() {
 		List<FirstDomain> list = firstRepository.findAll();
-		System.out.println(list);
 		return ResponseEntity.ok().body(list);
 
 	}
@@ -56,10 +58,10 @@ public class FirstController {
 	@ApiResponses({ @ApiResponse(code = 200, message = "Success"),
 			@ApiResponse(code = 500, message = "The POST call is Failed"),
 			@ApiResponse(code = 404, message = "The API could not be found") })
-
 	public ResponseEntity<FirstDomain> create(@Validated @RequestBody FirstDomain firstDomain) {
 		System.out.println("---------------------------" + firstDomain);
 		firstService.create(firstDomain);
+		System.out.println("******************************************" + "Method Called");
 		return ResponseEntity.ok().body(firstDomain);
 	}
 
@@ -67,7 +69,8 @@ public class FirstController {
 	@ApiResponses({ @ApiResponse(code = 200, message = "Success"),
 			@ApiResponse(code = 500, message = "The POST call is Failed"),
 			@ApiResponse(code = 404, message = "The API could not be found") })
-	public void delete(int id) {
+	public void delete(@RequestParam int id) {
+		System.out.println("++++++++++++++Delete Called+++++++++");
 		FirstDomain domain = firstRepository.findbyid(id);
 		firstRepository.delete(domain);
 	}
